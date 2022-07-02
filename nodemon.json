@@ -1,0 +1,12 @@
+{
+  "env": {
+      "PORT": 4000,
+      "MYSQL_HOST": "localhost",
+      "MASTER_USER": "#Welcome1",
+      "MYSQL_USERNAME": "root",
+      "MYSQL_PASSWORD": "123456789",
+      "MYSQL_DATABASE": "player_stats",
+      "CLIENT_URL": "http://localhost:3000",
+      "JWT_SECRET": "&KMdp"
+  }
+}
