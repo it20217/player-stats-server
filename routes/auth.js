@@ -1,6 +1,6 @@
 const express = require("express");
 const User = require("../models/user");
-const { body, validationResult } = require("express-validator");
+const { body, validationResult } = require('express-validator');
 const router = express.Router();
 const authController = require("../controllers/auth");
 
@@ -49,10 +49,10 @@ router.post("/signup", [
 
 // });
 
-router.post("/login", [
-  body("email").isEmail() .withMessage("Please enter correct email."), 
-  body("password").trim().isLength({min: 8}).withMessage("Incorrect username or password."),
-], (req, res) => {
+router.post("/login", 
+  body("email").isEmail() .withMessage("Email validation is failed"), 
+  body("password").trim().isLength({min: 8}).withMessage("Password validation is failed"),
+ (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error("Validation failed");

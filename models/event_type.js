@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../utils/database");
 
-const TraningType = sequelize.define("traning_type", {
+const TraningType = sequelize.define("training_type", {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,

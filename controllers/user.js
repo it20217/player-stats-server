@@ -3,9 +3,9 @@ const User = require("../models/user");
 /** Get all users */
 exports.getUsers = (req, res, next) => { 
   User.findAll({ 
-    attributes: ["firstName", "lastName", "id", "city", 
-    "email", "language", "phone", "role", "updated", "active",
-    "dataProtectionAccepted", "address", "city", "zipCode"]}).then(users => {
+    attributes: ["firstName", "lastName", "id", 
+    "email", "language", "phone", "roleId", "active",
+    "dataProtectionAccepted", "created_at"]}).then(users => {
     res.status(200).json({
       result: users,
       error: null

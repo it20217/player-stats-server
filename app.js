@@ -10,6 +10,7 @@ const app = express();
 const indexRouter = require('./routes/index');
 const authRoutes = require('./routes/auth')
 const userRoutes = require("./routes/user");
+const playerRoutes = require("./routes/player");
 
 const bodyParser = require("body-parser");
 
@@ -26,7 +27,7 @@ const Venue = require("./models/venue");
 const EventType = require("./models/event_type");
 const Event = require("./models/event");
 const Address = require("./models/address");
-const PP = require("./models/player_perfomance");
+const PP = require("./models/player_performance");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -41,6 +42,7 @@ app.use(function(req, res, next) {
 
 app.use(userRoutes);  
 app.use(authRoutes);
+app.use(playerRoutes);
 //app.use(rootRoutes);
 //app.use(adminRoutes);
 //app.use(testRoutes)

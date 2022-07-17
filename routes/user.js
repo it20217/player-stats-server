@@ -10,7 +10,7 @@ const isAuth = require("../middleware/auth");
 //   res.send('respond with a resource');
 // });
 
-/** Get all events */
+/** Get all users */
 router.get("/users", userController.getUsers);
 
 /** Get user settings */

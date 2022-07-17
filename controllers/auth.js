@@ -23,6 +23,7 @@ exports.signup = (req, res, next) => {
     const resetTokenExp = Date.now() + 7200000;
     bcrypt.hash(password, 12)
     .then(hashedPassword => {
+      console.log("user created!", data.players.length)
       User.create({
         firstName: data.firstName,
         lastName: data.lastName,
@@ -46,20 +47,15 @@ exports.signup = (req, res, next) => {
       })
       .then(loadedUser => {
         
-        if (data.players && data.players.length > 0) {
-  
-          const players = data.players.reduce((accumulator, currentValue) => {
-            return (currentValue.firstName.length === 0 || currentValue.lastName.length === 0 
-              || currentValue.birthYear.length === 0) ? accumulator : [...accumulator, {
-                firstName: currentValue.firstName,
-                lastName: currentValue.lastName,
-                birthYear: currentValue.birthYear,
-                homeClub: currentValue.homeClub,
-                userId: loadedUser.id
-              }];
-          }, [])
+        if (data?.players?.firstName?.length > 0 && data?.players?.lastName?.length > 0) {
 
-          Player.bulkCreate(players).then(player => {
+          Player.create({
+            firstName: data.players.firstName,
+            lastName: data.players.lastName,
+            birthYear: data.players.birthYear,
+            homeClub: data.players.homeClub,
+            userId: loadedUser.id
+          }).then(player => {
             console.log("PLAYER WAS CREATED", player);
             res.status(200).json({
               result: "Thank you for registartion.",
