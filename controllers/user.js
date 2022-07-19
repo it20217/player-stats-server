@@ -1,5 +1,6 @@
 const User = require("../models/user");
 
+
 /** Get all users */
 exports.getUsers = (req, res, next) => { 
   User.findAll({ 
@@ -17,4 +18,24 @@ exports.getUsers = (req, res, next) => {
       error: error
     });
   })
+}
+
+/** Delete User */
+
+exports.deleteUsers = (req, res) => {
+  const id = req.params.userId;
+  console.log("id", req.params.userId)
+  User.destroy({where: {id: id} })
+  .then((count)=> {
+    if(count >= 1) {
+      console.log(`deleted row(s): ${count}`)
+    } else {
+      res.send({error: `Failed to delete user with ${id}`})
+    }
+  })
+  .catch(err => {
+    res.status(500).send({
+      message: "Could not delete Tutorial with id=" + id
+    });
+  });
 }

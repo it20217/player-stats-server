@@ -13,6 +13,9 @@ const isAuth = require("../middleware/auth");
 /** Get all users */
 router.get("/users", userController.getUsers);
 
+/** Delete user */
+router.delete("/delete/:userId", userController.deleteUsers)
+
 /** Get user settings */
 // router.get("/user/settings/:id", isAuth, userController.getUserSettings);
 
