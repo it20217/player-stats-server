@@ -10,6 +10,8 @@ const app = express();
 const indexRouter = require('./routes/index');
 const authRoutes = require('./routes/auth')
 const userRoutes = require("./routes/user");
+const cityRoutes = require("./routes/city");
+const countryRoutes = require("./routes/country");
 const playerRoutes = require("./routes/player");
 
 const bodyParser = require("body-parser");
@@ -41,21 +43,27 @@ app.use(function(req, res, next) {
 });
 
 app.use(userRoutes);  
+app.use(cityRoutes);  
+app.use(countryRoutes);  
 app.use(authRoutes);
 app.use(playerRoutes);
 //app.use(rootRoutes);
 //app.use(adminRoutes);
 //app.use(testRoutes)
 
+
+/** Model Association */
+
 Country.hasMany(City, {constrains: true, onDelete: "CASCADE"});
 City.belongsTo(Country, {foreignKey: "country_id"});
 City.hasMany(Venue);
-Role.hasMany(User);
+User.hasOne(Role);
 User.belongsTo(Role, {foreignKey: "role_id"});
 User.hasMany(Player);
-User.hasOne(Address);
-User.hasMany(PP);
 Player.belongsTo(User, {constrains: true, onDelete: "CASCADE"});
+User.hasOne(Address);
+Address.belongsTo(User, {constrains: true, onDelete: "CASCADE"});
+User.hasMany(PP);
 Player.hasMany(Event);
 Player.hasMany(PP);
 Event.belongsTo(User, {foreignKey: "user_id"});
@@ -63,7 +71,6 @@ Event.belongsTo(Venue, {foreignKey: "venue_id"});
 Event.hasMany(PP);
 Venue.belongsTo(City, {foreignKey: "city_id"});
 Venue.hasMany(Event);
-Address.belongsTo(User, {foreignKey: "user_id", constrains: true, onDelete: "CASCADE"});
 PP.belongsTo(Player, {foreignKey: "player_id", constrains: true, onDelete: "CASCADE"});
 PP.belongsTo(User, {foreignKey: "user_id"});
 PP.belongsTo(Event, {foreignKey: "event_id"});

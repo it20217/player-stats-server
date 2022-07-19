@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Address = require("../models/address");
 const Player = require("../models/player");
 const { Op } = require("sequelize");
 const bcrypt = require("bcryptjs");
@@ -23,18 +24,14 @@ exports.signup = (req, res, next) => {
     const resetTokenExp = Date.now() + 7200000;
     bcrypt.hash(password, 12)
     .then(hashedPassword => {
-      console.log("user created!", data.players.length)
       User.create({
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
         password: hashedPassword,
         phone: data.phone,
-        city: data.city || "Dublin",
-        address: data.address || "",
-        zipCode: data.zipCode || "",
-        language: data.language || "en",
-        role: 0,
+        language: data.language || "en",
+        role_id: 3,
         created: currentDate,
         updated: currentDate,
         lastLogin: currentDate,
@@ -43,42 +40,52 @@ exports.signup = (req, res, next) => {
         active: 1,
         resetToken: resetToken,
         resetTokenExp: resetTokenExp,
-        agbAccepted: data.agbAccepted || 0
+        agbAccepted: data.agbAccepted || 0
       })
       .then(loadedUser => {
-        
-        if (data?.players?.firstName?.length > 0 && data?.players?.lastName?.length > 0) {
-
-          Player.create({
-            firstName: data.players.firstName,
-            lastName: data.players.lastName,
-            birthYear: data.players.birthYear,
-            homeClub: data.players.homeClub,
-            userId: loadedUser.id
-          }).then(player => {
-            console.log("PLAYER WAS CREATED", player);
+        console.log("ADDING ADDRESS!")
+        Address.create({
+          user_id: loadedUser.id,
+          city_id: data.city,
+          address: data.address,
+          zip_code: data.zipCode,
+        })
+        .then(userAddress => {
+          if (data?.players?.firstName?.length > 0 && data?.players?.lastName?.length > 0) {
+            
+            console.log("CREATING PLAYER!")
+  
+            Player.create({
+              firstName: data.players.firstName,
+              lastName: data.players.lastName,
+              birthYear: data.players.birthYear,
+              homeClub: data.players.homeClub,
+              userId: userAddress.user_id
+            }).then(player => {
+              console.log("PLAYER WAS CREATED");
+              res.status(200).json({
+                result: "Thank you for registartion.",
+                error: null
+              });
+            }).catch(err => {
+              console.log("ERROR CREATING PLAYER", err);
+              res.status(202).json({
+                result: `Thank you for registartion. Attention! Failure occured to save a player.`,
+                error: null
+              });
+            });
+  
+          } else {
+            console.log("No players", loadedUser.email)
             res.status(200).json({
               result: "Thank you for registartion.",
               error: null
             });
-          }).catch(err => {
-            console.log("ERROR CREATING PLAYER", err);
-            res.status(202).json({
-              result: `Thank you for registartion. Attention! Failure occured to save a player.`,
-              error: null
-            });
-          });
-
-        } else {
-          console.log("No players", loadedUser.email)
-          res.status(200).json({
-            result: "Thank you for registartion.",
-            error: null
-          });
-        }
+          }
+        })
       })
-      .catch(error => {
-        console.log("Catch register", error)
+      .catch(err => {
+        console.log("CATCH REGISTER", err)
         if (!err.statusCode) {
           err.statusCode = 500;
         }

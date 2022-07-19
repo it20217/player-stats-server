@@ -11,7 +11,7 @@ const Address = sequelize.define("address", {
     primaryKey: true
   }, 
   // Set FK relationship (hasOne) with `User`
-  userId: {
+  user_id: {
     type: Sequelize.INTEGER,
     references: {
       model: User,
@@ -19,7 +19,7 @@ const Address = sequelize.define("address", {
     }
   },
   // Set FK relationship (hasOne) with `City`
-  cityId: {
+  city_id: {
     type: Sequelize.INTEGER,
     references: {
       model: City,
@@ -30,7 +30,7 @@ const Address = sequelize.define("address", {
     type: Sequelize.STRING,
     allowNull: false
   },
-  zipCode: {
+  zip_code: {
     type: Sequelize.STRING,
     allowNull: false
   }

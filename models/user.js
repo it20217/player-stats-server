@@ -1,4 +1,4 @@
-const Sequelize = require("sequelize");
+const {Sequelize} = require("sequelize");
 const sequelize = require("../utils/database");
 const Role = require("./role");
 
@@ -35,12 +35,13 @@ const User = sequelize.define("user", {
     defaultValue: "en",
   },
   // Set FK relationship (hasOne) with `Roles`
-  roleId: {
+  role_id: {
     type: Sequelize.INTEGER,
     references: {
       model: Role,
       key: "id"
-    }
+    },
+    defaultValue: 3
   },
   dataProtectionAccepted: {
     type: Sequelize.TINYINT,
