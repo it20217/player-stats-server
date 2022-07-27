@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../utils/database");
 
-const TraningType = sequelize.define("training_type", {
+const EventType = sequelize.define("event_type", {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -16,4 +16,4 @@ const TraningType = sequelize.define("training_type", {
   underscored: true
 });
 
-module.exports = TraningType;
+module.exports = EventType;

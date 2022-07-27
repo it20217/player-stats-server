@@ -19,6 +19,23 @@ exports.getUsers = (req, res, next) => {
     });
   })
 }
+/** Get all Trainers */
+exports.getTrainers = (req, res, next) => { 
+  User.findAll({ 
+    where: {role_id: 2}
+  }).then(trainers => {
+      res.status(200).json({
+      result: trainers,
+      error: null
+    });
+  })
+  .catch(error => {
+    res.status(500).json({
+      result: null,
+      error: error
+    });
+  })
+}
 
 /** Delete User */
 
@@ -35,7 +52,7 @@ exports.deleteUsers = (req, res) => {
   })
   .catch(err => {
     res.status(500).send({
-      message: "Could not delete Tutorial with id=" + id
+      message: "Could not delete User with id=" + id
     });
   });
 }

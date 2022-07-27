@@ -104,7 +104,6 @@ async function login (req, res, next) {
   const password = req.body.password;
   const user =  User.findOne({ where: { email: email } });
   const loadedUser = await user;
-  console.log(email, password, loadedUser.password);
   if (!loadedUser) {
     res.status(401).json({
       result: null,

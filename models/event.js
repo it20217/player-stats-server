@@ -5,14 +5,14 @@ const Venue = require("./venue");
 const EventType = require("./event_type")
 
 const Event = database.define("event", {
-  event_id: {
+  id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true
   }, 
-  // Set FK relationship (hasMany) with `User`
-  userId: {
+  // Set FK relationship (hasOne) with `User`
+  user_id: {
     type: Sequelize.INTEGER,
     references: {
       model: User,
@@ -39,9 +39,9 @@ const Event = database.define("event", {
       key: "id"
     }
   },
-  count: {
+  count: {  
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: true
   },
   description: {
     type: Sequelize.STRING,

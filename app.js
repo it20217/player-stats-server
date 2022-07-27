@@ -13,6 +13,9 @@ const userRoutes = require("./routes/user");
 const cityRoutes = require("./routes/city");
 const countryRoutes = require("./routes/country");
 const playerRoutes = require("./routes/player");
+const eventRoutes = require("./routes/event");
+const assignmentRoutes = require("./routes/assignment");
+const venueRoutes = require("./routes/venue");
 
 const bodyParser = require("body-parser");
 
@@ -28,6 +31,7 @@ const Player = require("./models/player");
 const Venue = require("./models/venue");
 const EventType = require("./models/event_type");
 const Event = require("./models/event");
+const Assignment = require("./models/assignment");
 const Address = require("./models/address");
 const PP = require("./models/player_performance");
 
@@ -47,6 +51,10 @@ app.use(cityRoutes);
 app.use(countryRoutes);  
 app.use(authRoutes);
 app.use(playerRoutes);
+app.use(eventRoutes);
+app.use(assignmentRoutes);
+app.use(venueRoutes);
+
 //app.use(rootRoutes);
 //app.use(adminRoutes);
 //app.use(testRoutes)
@@ -58,22 +66,27 @@ Country.hasMany(City, {constrains: true, onDelete: "CASCADE"});
 City.belongsTo(Country, {foreignKey: "country_id"});
 City.hasMany(Venue);
 User.hasOne(Role);
-User.belongsTo(Role, {foreignKey: "role_id"});
-User.hasMany(Player);
-Player.belongsTo(User, {constrains: true, onDelete: "CASCADE"});
 User.hasOne(Address);
-Address.belongsTo(User, {constrains: true, onDelete: "CASCADE"});
+User.hasMany(Player);
+User.hasMany(Assignment);
+User.hasMany(Event);
 User.hasMany(PP);
-Player.hasMany(Event);
-Player.hasMany(PP);
+User.belongsTo(Role, {foreignKey: "role_id"});
+Player.hasMany(Assignment);
+Player.belongsTo(User, {foreignKey: "user_id"});
+Address.belongsTo(User, {constrains: true, onDelete: "CASCADE"});
+Event.hasMany(Assignment);
 Event.belongsTo(User, {foreignKey: "user_id"});
 Event.belongsTo(Venue, {foreignKey: "venue_id"});
-Event.hasMany(PP);
+Assignment.belongsTo(Event, {foreignKey: "event_id"});
+Assignment.belongsTo(Player, {foreignKey: "player_id"});
+Assignment.belongsTo(User, {foreignKey: "user_id"});
+Assignment.hasMany(PP);
+Assignment.hasMany(PP);
 Venue.belongsTo(City, {foreignKey: "city_id"});
 Venue.hasMany(Event);
-PP.belongsTo(Player, {foreignKey: "player_id", constrains: true, onDelete: "CASCADE"});
-PP.belongsTo(User, {foreignKey: "user_id"});
-PP.belongsTo(Event, {foreignKey: "event_id"});
+PP.belongsTo(Assignment, {foreignKey: "assignment_id"});
+PP.belongsTo(User, {foreignKey: "user_id"});;
 
 sequilize.sync()
 .then(() => {
@@ -115,7 +128,7 @@ sequilize.sync()
 })
 .then(eventTypes => {
   if (eventTypes === 0) {
-    return EventType.bulkCreate([{ name: "Training" }, { name: "Camp" }, { name: "Game" }])
+    return EventType.bulkCreate([{ name: "Training" }, { name: "Assessment" }, { name: "Game" }])
   }
   return eventTypes;
 })
@@ -143,20 +156,33 @@ sequilize.sync()
   if (users === 0) {
     const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const password = process.env.MASTER_USER;
-    bcrypt.hash(password, 12)
-    .then(hashedPassword => {
-      return User.create({firstName: "Igor", lastName: "Tokarev", email: "igor.tokarev@outlook.com", password: hashedPassword,
-      phone: "04235", role_id: 1, dataProtectionAccepted: 1, offersAccepted: 1, active: 1})
-    });
+      bcrypt.hash(password, 12)
+      .then(hashedPassword => {
+        return User.create({firstName: "Igor", lastName: "Tokarev", email: "igor.tokarev@outlook.com", password: hashedPassword,
+        phone: "04235", role_id: 1, dataProtectionAccepted: 1, offersAccepted: 1, active: 1})
+      })
   }
   return users;
 })
-.then(players=> {
-  if (players === 0) {
-      return Player.create({firstName: "Max", lastName: "Mustermann", birthYear: 2012, homeClub: "Football Academy of Ireland"})
-    }
-  return players;
-})
+// .then(() => {
+//   return Player.count();
+// })
+// .then(players => {
+//   if (players === 0) {
+//       return Player.create({userId: 1, firstName: "Max", lastName: "Mustermann", birthYear: 2012, homeClub: "Football Academy of Ireland"})
+//     }
+//   return players;
+// })
+// .then(() => {
+//   return Event.count();
+// })
+// .then(events => {
+//   if (events === 0){
+//   const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+//   return Event.create({date: currentDate, user_id: 1, venue_id: 1, event_type_id: 1, count: 0, description: " "})
+//   }
+//   return events;
+// })
 
 
 module.exports = app;

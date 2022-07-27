@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 const sequelize = require("../utils/database");
 const Role = require("./player");
 const User = require("./user");
-const Player = require("./player");
+const Assignment = require("./assignment");
 
 const PP = sequelize.define("player_performance", {
   id: {
@@ -11,27 +11,11 @@ const PP = sequelize.define("player_performance", {
     allowNull: false,
     primaryKey: true
   }, 
-  // Set FK relationship (hasOne) with `Player`
-  playerId: {
+  // Set FK relationship (hasOne) with `Assignment`
+  assignmentId: {
     type: Sequelize.INTEGER,
     references: {
-      model: Player,
-      key: "id"
-    }
-  },
-  // Set FK relationship (hasOne) with `User`
-  userId: {
-    type: Sequelize.INTEGER,
-    references: {
-      model: User,
-      key: "id"
-    }
-  },
-  // Set FK relationship (hasOne) with `Event`
-  eventId: {
-    type: Sequelize.INTEGER,
-    references: {
-      model: Event,
+      model: Assignment,
       key: "id"
     }
   },
