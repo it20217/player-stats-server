@@ -5,7 +5,7 @@ const User = require("./user")
 const Event = require("./event")
 
 const Assignment = sequelize.define("assignment", {
-  assignmentId: {
+  id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,

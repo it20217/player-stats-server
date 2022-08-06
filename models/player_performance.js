@@ -1,7 +1,5 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../utils/database");
-const Role = require("./player");
-const User = require("./user");
 const Assignment = require("./assignment");
 
 const PP = sequelize.define("player_performance", {
@@ -43,7 +41,7 @@ const PP = sequelize.define("player_performance", {
     allowNull: true,
     defaultValue: 0,
   },
-  concentartion: {
+  concentration: {
     type: Sequelize.INTEGER,
     allowNull: true,
     defaultValue: 0,

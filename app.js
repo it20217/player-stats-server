@@ -16,6 +16,7 @@ const playerRoutes = require("./routes/player");
 const eventRoutes = require("./routes/event");
 const assignmentRoutes = require("./routes/assignment");
 const venueRoutes = require("./routes/venue");
+const ppRoutes = require("./routes/pp");
 
 const bodyParser = require("body-parser");
 
@@ -54,6 +55,7 @@ app.use(playerRoutes);
 app.use(eventRoutes);
 app.use(assignmentRoutes);
 app.use(venueRoutes);
+app.use(ppRoutes);
 
 //app.use(rootRoutes);
 //app.use(adminRoutes);

@@ -10,6 +10,9 @@ const isAuth = require("../middleware/auth");
 /** Get all events */
 router.get("/assignments", assignmentController.getAssignments);
 
+/** Get assignments dataset */
+router.get("/assignments/dataset", assignmentController.getAssignmentDataset);
+
 /** Post new event */
 router.post("/POST/assignment", assignmentController.addAssignment);
 

@@ -11,6 +11,10 @@ const Event = database.define("event", {
     allowNull: false,
     primaryKey: true
   }, 
+  name: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
   // Set FK relationship (hasOne) with `User`
   user_id: {
     type: Sequelize.INTEGER,

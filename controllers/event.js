@@ -32,11 +32,11 @@ async function getEventsDataset (req, res) {
 module.exports.getEventsDataset = getEventsDataset;
 
 /** Get all events */
-exports.getEvents = (req, res, next) => { 
+exports.getEvents = (req, res) => { 
   Event.findAll({ 
-    attributes: ["id", "date", "user_id", "venue_id", "event_type_id", "count", "description"],
+    attributes: ["id", "name", "description", "date", "user_id", "venue_id", "event_type_id", "count", "description"],
       include: [
-        {model: Assignment, attributes: ["assignment_id", "player_id", "event_id", "user_id"]}
+        {model: Assignment, attributes: ["id", "player_id", "event_id", "user_id"], include: [Player]}
       ]
     }).then(events => {
         res.status(200).json({
@@ -51,10 +51,12 @@ exports.getEvents = (req, res, next) => {
     });
   })
 }
+
 /** Post NEW event */
 async function addEvent (req, res, next) {
   const newEvent = req.body;
   const createdEvent = Event.create({
+    name: req.body.name,
     userId: req.body.user_id,
     venue_id: req.body.venue_id,
     date: req.body.date,
