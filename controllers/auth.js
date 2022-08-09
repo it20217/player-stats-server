@@ -20,8 +20,6 @@ exports.signup = (req, res, next) => {
       });
     }
     const confirmToken = buffer.toString("hex");
-    const resetToken = confirmToken;
-    const resetTokenExp = Date.now() + 7200000;
     bcrypt.hash(password, 12)
     .then(hashedPassword => {
       User.create({
@@ -32,18 +30,11 @@ exports.signup = (req, res, next) => {
         phone: data.phone,
         language: data.language || "en",
         role_id: 3,
-        created: currentDate,
-        updated: currentDate,
-        lastLogin: currentDate,
         dataProtectionAccepted: data.dataProtectionAccepted ? 1 : 0,
-        offersAccepted: data.dataProtectionAccepted ? 1 : 0,
         active: 1,
-        resetToken: resetToken,
-        resetTokenExp: resetTokenExp,
         agbAccepted: data.agbAccepted || 0
       })
       .then(loadedUser => {
-        console.log("ADDING ADDRESS!")
         Address.create({
           user_id: loadedUser.id,
           city_id: data.city,

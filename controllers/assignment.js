@@ -49,8 +49,8 @@ module.exports.addAssignment = addAssignment;
 /** Delete Event */
 
 exports.deleteAssignments = (req, res) => {
-  const id = req.params.id;
-  Assignment.destroy({where: {assignmentId: id} })
+  const assignmentId = req.params.id;
+  Assignment.destroy({where: {id: assignmentId} })
   .then((count)=> {
     // if(count >= 1) {
     //   console.log(`deleted row(s): ${count}`)

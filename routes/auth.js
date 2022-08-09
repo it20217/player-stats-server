@@ -12,7 +12,7 @@ router.post("/signup", [
     body("email")
       .isEmail() 
       .withMessage("Please provide the correct email")
-      .custom((value, { req }) => {
+      .custom((value) => {
         return User.findOne({ where: { email: value } }).then(user => {
             console.log(user);
           if (user) {
@@ -20,7 +20,7 @@ router.post("/signup", [
           }
         });
       }),
-    body("password").trim().isLength({min: 8}).withMessage("Please enter the coorect password."),
+    body("password").trim().isLength({min: 8}).withMessage("Please enter the coorect password. Min length is 8 characters."),
     body("firstName").trim().not().isEmpty().withMessage("Enter first name"),
     body("lastName").trim().not().isEmpty().withMessage("Enter last name."),
     body("address").trim().not().isEmpty().withMessage("Enter addresse."),
@@ -50,8 +50,8 @@ router.post("/signup", [
 // });
 
 router.post("/login", 
-  body("email").isEmail() .withMessage("Email validation is failed"), 
-  body("password").trim().isLength({min: 8}).withMessage("Password validation is failed"),
+  body("email").isEmail() .withMessage("Invalid Email"), 
+  body("password").trim().isLength({min: 8}).withMessage("Invalid password"),
  (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

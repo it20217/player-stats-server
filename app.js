@@ -161,7 +161,7 @@ sequilize.sync()
       bcrypt.hash(password, 12)
       .then(hashedPassword => {
         return User.create({firstName: "Igor", lastName: "Tokarev", email: "igor.tokarev@outlook.com", password: hashedPassword,
-        phone: "04235", role_id: 1, dataProtectionAccepted: 1, offersAccepted: 1, active: 1})
+        phone: "04235", role_id: 1, dataProtectionAccepted: 1, active: 1})
       })
   }
   return users;
