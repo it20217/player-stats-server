@@ -54,29 +54,40 @@ exports.getEvents = (req, res) => {
 
 /** Post NEW event */
 async function addEvent (req, res, next) {
-  const newEvent = req.body;
-  const createdEvent = Event.create({
-    name: req.body.name,
-    userId: req.body.user_id,
-    venue_id: req.body.venue_id,
-    date: req.body.date,
-    event_type_id: req.body.event_type_id,
-    count: 0,
-    description: " "
-  });
-  console.log("!!!AWAITING FOR RESPONSE")
-  let event = await createdEvent;
 
-  if (event) {
-    res.status(200).json({
-      result: "New Event has been created",
-      error: null
+  let request = req.body;
+
+  const loadUser =  User.findOne({ where: { id: request?.user_id || 0 } });
+  const user = await loadUser;
+  if (!user || user.active === 0 || user.role === 3) {
+    res.status(401).json({
+      result: null,
+      error: "Not authenticated"
     });
   } else {
-    res.status(403).json({
-      result: null,
-      error: "Fail to add a new event"
+    const createdEvent = Event.create({
+      name: req.body.name,
+      userId: req.body.user_id,
+      venue_id: req.body.venue_id,
+      date: req.body.date,
+      event_type_id: req.body.event_type_id,
+      count: 0,
+      description: " "
     });
+
+    let event = await createdEvent;
+  
+    if (event) {
+      res.status(200).json({
+        result: "New Event has been created",
+        error: null
+      });
+    } else {
+      res.status(403).json({
+        result: null,
+        error: "Fail to add a new event"
+      });
+    }
   }
 }
 module.exports.addEvent = addEvent;

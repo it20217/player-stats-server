@@ -13,7 +13,7 @@ router.get("/events/dataset", eventController.getEventsDataset);
 router.get("/events", eventController.getEvents);
 
 /** Post new event */
-router.post("/POST/event", eventController.addEvent);
+router.post("/POST/event", isAuth, eventController.addEvent);
 
 /** Delete event */
 router.delete("/delete/:eventId", eventController.deleteEvents)
