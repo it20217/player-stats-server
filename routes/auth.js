@@ -4,8 +4,6 @@ const { body, validationResult } = require('express-validator');
 const router = express.Router();
 const authController = require("../controllers/auth");
 
-/** Allow to use a middleware function. Will be executed for any incoming PUT request */
-
 /** Sign up */
 
 router.post("/signup", [
@@ -20,10 +18,10 @@ router.post("/signup", [
           }
         });
       }),
-    body("password").trim().isLength({min: 8}).withMessage("Please enter the coorect password. Min length is 8 characters."),
+    body("password").trim().isLength({min: 8}).withMessage("Please enter the correct password. Min length is 8 characters."),
     body("firstName").trim().not().isEmpty().withMessage("Enter first name"),
     body("lastName").trim().not().isEmpty().withMessage("Enter last name."),
-    body("address").trim().not().isEmpty().withMessage("Enter addresse."),
+    body("address").trim().not().isEmpty().withMessage("Enter address."),
     body("city").trim().not().isEmpty().withMessage("Enter city"),
     body("zipCode").trim().not().isEmpty().withMessage("Enter post code"),
     body("phone").trim().not().isEmpty().withMessage("Enter phone number."),
@@ -66,8 +64,5 @@ router.post("/login",
     authController.login(req, res);
   }
 });
-
-
-
 
 module.exports = router;

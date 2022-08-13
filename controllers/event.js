@@ -96,7 +96,6 @@ module.exports.addEvent = addEvent;
 
 exports.deleteEvents = (req, res) => {
   const id = req.params.id;
-  console.log("id", req.params.id)
   Event.destroy({where: {id: id} })
   .then((count)=> {
     if(count >= 1) {

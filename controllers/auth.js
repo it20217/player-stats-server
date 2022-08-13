@@ -115,9 +115,9 @@ async function login (req, res, next) {
     } else {
       loadedUser.lastLogin = new Date();
       loadedUser.save();
-      
+      console.log("!!!!!!!user", loadedUser)
       const token = jwt.sign({ email: loadedUser.email, id: loadedUser.id, 
-        firstName: loadedUser.firstName, lastName: loadedUser.lastName, role: loadedUser.role }, process.env.JWT_SECRET, { expiresIn: "1d" });
+        firstName: loadedUser.firstName, lastName: loadedUser.lastName, role: loadedUser.role_id }, process.env.JWT_SECRET, { expiresIn: "1d" });
       res.status(200).json({
         result: token,
         error: null

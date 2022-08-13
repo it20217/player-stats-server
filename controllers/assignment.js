@@ -52,11 +52,6 @@ exports.deleteAssignments = (req, res) => {
   const assignmentId = req.params.id;
   Assignment.destroy({where: {id: assignmentId} })
   .then((count)=> {
-    // if(count >= 1) {
-    //   console.log(`deleted row(s): ${count}`)
-    // } else {
-    //   res.send({error: `Failed to delete Assignment with ${id}`})
-    // }
     res.status(200).json({
       result: "Assignment has been removed",
       error: null
@@ -83,17 +78,27 @@ async function getAssignmentDataset (req, res) {
   let players = await Player.findAll();
 
   /** Parse db object into JSON */
-  let parsedEvents = JSON.parse(JSON.stringify(events, null, 2));
+  let parsedEvents;
+  try {
+    parsedEvents = JSON.parse(JSON.stringify(events, null, 2));
+  } catch (err) {
+    console.log(err);
+  }
 
-  parsedEvents.map(event => {
+  parsedEvents?.map(event => {
     if (event.assignments?.length > 0) {
       return event.assignments.map(assignment => {
         let playerName = players?.filter(player => player.id === assignment.player_id)[0];
         /** Parse db object into JSON */
-        let newPlayer = JSON.parse(JSON.stringify(playerName, null, 2));
-        assignment.firstName = newPlayer.firstName;
-        assignment.lastName = newPlayer.lastName;
-        assignment.homeClub = newPlayer.homeClub;
+        let newPlayer;
+        try {
+          newPlayer = JSON.parse(JSON.stringify(playerName, null, 2));
+        } catch (err) {
+          console.log(err);
+        }
+        assignment.firstName = newPlayer?.firstName;
+        assignment.lastName = newPlayer?.lastName;
+        assignment.homeClub = newPlayer?.homeClub;
         return assignment;
       })
     }

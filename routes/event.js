@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
+/** Allow to use a middleware function. Will be executed for any incoming PUT request */
 const isAuth = require("../middleware/auth");
-
 const eventController = require("../controllers/event");
 
 /** Get all info */

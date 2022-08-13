@@ -1,5 +1,7 @@
 const User = require("../models/user");
-
+const Player = require("../models/player");
+const PP = require("../models/player_performance");
+const Assignment = require("../models/assignment");
 
 /** Get all users */
 exports.getUsers = (req, res, next) => { 
@@ -19,6 +21,7 @@ exports.getUsers = (req, res, next) => {
     });
   })
 }
+
 /** Get all Trainers */
 exports.getTrainers = (req, res, next) => { 
   User.findAll({ 
@@ -41,7 +44,6 @@ exports.getTrainers = (req, res, next) => {
 
 exports.deleteUsers = (req, res) => {
   const id = req.params.userId;
-  console.log("id", req.params.userId)
   User.destroy({where: {id: id} })
   .then((count)=> {
     if(count >= 1) {
@@ -56,3 +58,27 @@ exports.deleteUsers = (req, res) => {
     });
   });
 }
+
+/** Get user */
+async function getUserProfile (req, res, next) {
+  
+  let userId = req.userId;
+
+  const loadUser =  User.findOne({ where: { id: userId || 0 },
+    include: [{model: Player, include: [{model: Assignment, attributes: ["id", "playerId", "userId", "eventId"], include: [{model: PP}]}]}]
+  });
+  const user = await loadUser;
+  if (!user || user.active === 0 || user.role === 3) {
+    res.status(401).json({
+      result: null,
+      error: "Not authenticated"
+    });
+  } else {
+    res.status(200).json({
+      result: user,
+      error: null
+    });
+  }
+}
+
+module.exports.getUserProfile = getUserProfile;

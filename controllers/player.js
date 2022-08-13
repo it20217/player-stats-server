@@ -106,10 +106,8 @@ exports.getPlayer = (req, res, next) => {
 }
 
 /** Delete Player */
-
 exports.deletePlayers = (req, res) => {
   const id = req.params.id;
-  console.log("id", req.params.id)
   Player.destroy({where: {id: id} })
   .then((count)=> {
     if(count >= 1) {

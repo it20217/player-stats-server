@@ -1,13 +1,8 @@
-const createError = require('http-errors');
 const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
 const bcrypt = require("bcryptjs");
 const sequilize = require("./utils/database");
 const app = express();
 
-const indexRouter = require('./routes/index');
 const authRoutes = require('./routes/auth')
 const userRoutes = require("./routes/user");
 const cityRoutes = require("./routes/city");
@@ -19,10 +14,6 @@ const venueRoutes = require("./routes/venue");
 const ppRoutes = require("./routes/pp");
 
 const bodyParser = require("body-parser");
-
-//const adminRoutes = require("./routes/admin");
-//const rootRoutes = require("./routes/home");
-//const testRoutes = require("./routes/test");
 
 const Role = require("./models/role");
 const User = require("./models/user");
@@ -57,13 +48,7 @@ app.use(assignmentRoutes);
 app.use(venueRoutes);
 app.use(ppRoutes);
 
-//app.use(rootRoutes);
-//app.use(adminRoutes);
-//app.use(testRoutes)
-
-
 /** Model Association */
-
 Country.hasMany(City, {constrains: true, onDelete: "CASCADE"});
 City.belongsTo(Country, {foreignKey: "country_id"});
 City.hasMany(Venue);
@@ -165,26 +150,6 @@ sequilize.sync()
       })
   }
   return users;
-})
-// .then(() => {
-//   return Player.count();
-// })
-// .then(players => {
-//   if (players === 0) {
-//       return Player.create({userId: 1, firstName: "Max", lastName: "Mustermann", birthYear: 2012, homeClub: "Football Academy of Ireland"})
-//     }
-//   return players;
-// })
-// .then(() => {
-//   return Event.count();
-// })
-// .then(events => {
-//   if (events === 0){
-//   const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
-//   return Event.create({date: currentDate, user_id: 1, venue_id: 1, event_type_id: 1, count: 0, description: " "})
-//   }
-//   return events;
-// })
-
+});
 
 module.exports = app;
